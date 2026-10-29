@@ -359,3 +359,5 @@ a.link-btn:hover { border-color: var(--slate); color: var(--slate); }
   .progress li.running::before { animation: none; border-color: #fff; }
   .obj-card .imgs img { transition: none; }
 }
+
+.center-note { text-align: center; margin: 0; }

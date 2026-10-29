@@ -510,7 +510,7 @@
 
   // ---------------------------------------------------------------- BibTeX copy
   const copyBtn = $("btn-copy");
-  copyBtn.onclick = async () => {
+  if (copyBtn) copyBtn.onclick = async () => {
     try {
       await navigator.clipboard.writeText($("bibtex").innerText);
       copyBtn.textContent = "Copied";

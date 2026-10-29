@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Open-World Scene Deocclusion</title>
+  <meta name="description" content="A training-free, open-world framework that recovers the full amodal appearance of occluded objects from a single RGB image as depth-ordered RGBA layers. WACV 2027.">
+  <meta property="og:title" content="Open-World Scene Deocclusion (WACV 2027)">
+  <meta property="og:description" content="Training-free open-world scene deocclusion: depth-ordered RGBA layers from a single image.">
+  <meta property="og:image" content="static/images/teaser.jpg">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='3' y='8' width='16' height='16' rx='2' fill='%233d5a80'/><rect x='13' y='4' width='16' height='16' rx='2' fill='%23c86b2e' fill-opacity='.85'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body id="top">
+
+<nav class="topbar" id="topbar" aria-label="Sections">
+  <div class="topbar-in">
+    <a class="brand" href="#top">Open-World Scene Deocclusion</a>
+    <div class="nav-links">
+      <a href="#abstract">Abstract</a>
+      <a href="#method">Method</a>
+      <a href="#demo">Demo</a>
+      <a href="#citation">Citation</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <h1 class="title">Open-World Scene Deocclusion</h1>
+
+  <div class="byline">
+    <!-- TODO: add personal page URLs to the author links -->
+    <p class="authors">
+      <span class="au"><a href="#">K.M.S.J. Kumarasinghe</a><sup>1</sup></span>
+      <span class="au"><a href="#">Neil A. Dodgson</a><sup>1</sup></span>
+      <span class="au"><a href="#">Fang-Lue Zhang</a><sup>2</sup></span>
+    </p>
+    <p class="affiliations">
+      <span><sup>1</sup>Victoria University of Wellington</span>
+      <span><sup>2</sup>University of New South Wales</span>
+    </p>
+    <p class="venue">WACV 2027</p>
+  </div>
+
+  <nav class="links" aria-label="Resources">
+    <!-- TODO: swap each <span class="link-btn soon"> for <a class="link-btn" href="..."> once available -->
+    <span class="link-btn soon" title="Available soon">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2.5h8.5L19 7v14.5H6z M14 2.5V7h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      Paper <small>coming soon</small></span>
+    <span class="link-btn soon" title="Available soon">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      arXiv <small>coming soon</small></span>
+    <span class="link-btn soon" title="Available soon">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Code <small>coming soon</small></span>
+    <a class="link-btn primary" href="#demo">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z" fill="currentColor"/></svg>
+      Interactive demo</a>
+  </nav>
+</header>
+
+<main>
+
+  <figure class="wrap figure teaser">
+    <img src="static/images/teaser.jpg" width="2054" height="1080"
+         alt="Deocclusion across three scene types: an object hidden behind another, interlocked objects, and an object cut by the image frame">
+    <figcaption>
+      Three kinds of occlusion: (a) an object hidden behind another, (b) interlocked objects that occlude
+      each other, and (c) an object cut by the image frame. From the original scene (I), the method recovers the
+      background and every object as a complete layer (II), which can then be rearranged into a new scene (III).
+    </figcaption>
+  </figure>
+
+  <section class="wrap section" id="abstract">
+    <h2>Abstract</h2>
+    <div class="body prose abstract">
+      <p>
+        Recovering the complete appearance of occluded objects from a single image is a fundamental problem for
+        scene understanding and image editing. Real-world scenes are challenging due to clutter, complex spatial
+        occlusions, and diverse object categories. Existing methods often struggle when occlusion involves background
+        surfaces or objects that are not explicitly detected, and fail to resolve the cyclic occlusion dependencies
+        that frequently occur in natural scenes.
+      </p>
+      <p>
+        We introduce a training-free, open-world scene deocclusion framework that recovers the full amodal appearance
+        of detected or user-selected objects from a single RGB image, decomposing the scene into depth-ordered RGBA
+        layers that are geometrically plausible, semantically faithful, and visually consistent with the visible scene.
+        Extensive experiments show that our approach improves scene-level deocclusion, producing coherent and realistic
+        reconstructions in real-world settings.
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap section" id="method">
+    <h2>Method</h2>
+    <div class="body">
+      <p class="prose lead">
+        The pipeline works in two stages. Scene-level reasoning runs once per image and decides what hides what.
+        Instance-level completion then runs once per object and paints in what was hidden.
+      </p>
+    </div>
+
+    <figure class="figure method">
+      <img src="static/images/method.png" width="2074" height="976" alt="Overview of the layered amodal scene deocclusion framework">
+    </figure>
+
+    <div class="body wide">
+      <p class="legend">
+        <span><i class="key ours"></i>Our contribution</span>
+        <span><i class="key shelf"></i>Off-the-shelf model</span>
+      </p>
+      <ol class="pipeline-list">
+        <li class="shelf">
+          <h3>Instance segmentation</h3>
+          <p>YOLO boxes prompt SAM2 for precise masks. Users can also point at any object the detector misses.</p>
+        </li>
+        <li class="ours">
+          <h3>Geometric scene reasoning</h3>
+          <p>Pairwise occlusion and dense depth are combined. Depth-validated detection finds background occluders that segmentation misses, and objects cut by the frame are flagged for outpainting.</p>
+        </li>
+        <li class="ours">
+          <h3>Cycle-safe layer ordering</h3>
+          <p>Mutual-occlusion cycles are collapsed into strongly connected components, objects are grouped by their longest occlusion chain, and depth orders objects within each group.</p>
+        </li>
+        <li class="ours">
+          <h3>Inpainting mask generation</h3>
+          <p>Each object's mask covers every object that hides it, directly or indirectly, kept within depth-consistent reach of the occluded region.</p>
+        </li>
+        <li class="shelf">
+          <h3>Prompt refinement</h3>
+          <p>Open-vocabulary tags are ranked against the object with CLIP to choose a precise text prompt.</p>
+        </li>
+        <li class="ours">
+          <h3>Amodal completion</h3>
+          <p>Diffusion in- and outpainting completes each object, repeating until boundary, colour, texture and plausibility scores pass. Each object is saved as an RGBA layer.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="wrap section" id="demo">
+    <h2>Interactive demo</h2>
+    <div class="body">
+      <p class="prose lead">
+        Choose a scene and press <em>Deocclude</em>. Then rearrange the result: drag objects, change which one is
+        in front, resize, flip or hide them. Completed regions stay consistent wherever an object goes.
+      </p>
+    </div>
+
+    <div class="demo-app">
+      <div class="scene-bar">
+        <div class="filters" id="scene-filters" role="tablist" aria-label="Filter scenes by occlusion type"></div>
+        <div class="stepper">
+          <button class="icon-btn" id="scene-prev" aria-label="Previous scene">
+            <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <span class="count" id="scene-count" aria-live="polite"></span>
+          <button class="icon-btn" id="scene-next" aria-label="Next scene">
+            <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+      <div class="filmstrip" id="gallery" role="listbox" aria-label="Example scenes"></div>
+
+      <div class="workspace" id="demo-panel">
+        <div class="viewer">
+          <div class="viewer-head">
+            <div class="tabs" role="tablist" aria-label="View">
+              <button class="tab active" data-view="input" role="tab">Input</button>
+              <button class="tab" data-view="composite" role="tab" disabled>Recomposed</button>
+              <button class="tab" data-view="background" role="tab" disabled>Background only</button>
+            </div>
+            <button class="btn primary" id="btn-deocclude">Deocclude</button>
+          </div>
+
+          <div class="canvas-wrap checker">
+            <canvas id="viewer-canvas"></canvas>
+            <div class="overlay" id="overlay" hidden>
+              <ol class="progress" id="pipeline">
+                <li>Segmenting objects</li>
+                <li>Reasoning about occlusion and depth</li>
+                <li>Ordering layers</li>
+                <li>Completing hidden regions</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="edit-bar" id="edit-bar" hidden>
+            <p class="edit-hint" id="edit-hint">Drag an object to move it. Click it to select.</p>
+            <div class="edit-tools">
+              <button class="tool" id="tool-forward"  disabled>Bring forward</button>
+              <button class="tool" id="tool-backward" disabled>Send backward</button>
+              <button class="tool" id="tool-smaller"  disabled aria-label="Make smaller">−</button>
+              <button class="tool" id="tool-bigger"   disabled aria-label="Make bigger">+</button>
+              <button class="tool" id="tool-flip"     disabled>Flip</button>
+              <button class="tool" id="tool-hide"     disabled>Hide</button>
+              <button class="tool quiet" id="tool-layout">Reset layout</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="layers" id="layers" hidden aria-label="Layers">
+          <div class="layers-head">
+            <h3>Layers</h3>
+            <span class="muted">front to back</span>
+          </div>
+          <ul id="layer-list"></ul>
+          <div class="layer-actions">
+            <button class="tool" id="btn-all">Show all</button>
+            <button class="tool" id="btn-none">Hide all</button>
+          </div>
+        </aside>
+      </div>
+
+      <div class="objects-block" id="objects-block" hidden>
+        <h3>Completed objects</h3>
+        <p class="muted">Hover or tap a card to compare the visible part with the completed object.</p>
+        <div class="objects" id="objects"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section" id="citation">
+    <h2>Citation</h2>
+    <div class="body">
+      <div class="bibtex">
+        <button class="tool copy" id="btn-copy">Copy BibTeX</button>
+<pre id="bibtex"><code>@inproceedings{kumarasinghe2027owsd,
+  title     = {Open-World Scene Deocclusion},
+  author    = {Kumarasinghe, K.M.S.J. and Dodgson, Neil A. and Zhang, Fang-Lue},
+  booktitle = {Proceedings of the IEEE/CVF Winter Conference on
+               Applications of Computer Vision (WACV)},
+  year      = {2027}
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap footer">
+  <p>&copy; 2026 OWSD</p>
+</footer>
+
+<script src="static/js/demo.js"></script>
+</body>
+</html>

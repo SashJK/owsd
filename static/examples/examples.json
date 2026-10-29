@@ -1,0 +1,79 @@
+{
+  "scenes": [
+    {
+      "id": "000000009046",
+      "title": "Cat and cup",
+      "category": "Hidden by object",
+      "dir": "static/examples/000000009046",
+      "input": "input.jpg",
+      "thumb": "thumb.jpg",
+      "background": "background.webp",
+      "objects": [
+        {
+          "name": "cup",
+          "layer": 2,
+          "visible_ratio": 1.0,
+          "amodal": "objects/00_cup_amodal.webp",
+          "modal": "objects/00_cup_modal.webp",
+          "crop_amodal": "objects/00_cup_amodal_crop.webp",
+          "crop_modal": "objects/00_cup_modal_crop.webp"
+        },
+        {
+          "name": "cat",
+          "layer": 1,
+          "visible_ratio": 0.906,
+          "amodal": "objects/01_cat_amodal.webp",
+          "modal": "objects/01_cat_modal.webp",
+          "crop_amodal": "objects/01_cat_amodal_crop.webp",
+          "crop_modal": "objects/01_cat_modal_crop.webp"
+        },
+        {
+          "name": "occluder",
+          "layer": 0,
+          "visible_ratio": 0.845,
+          "amodal": "objects/02_occluder_amodal.webp",
+          "modal": "objects/02_occluder_modal.webp",
+          "crop_amodal": "objects/02_occluder_amodal_crop.webp",
+          "crop_modal": "objects/02_occluder_modal_crop.webp"
+        }
+      ]
+    },
+    {
+      "id": "bear_sheep",
+      "title": "Bear and sheep",
+      "category": "Cut by frame",
+      "dir": "static/examples/bear_sheep",
+      "input": "input.jpg",
+      "thumb": "thumb.jpg",
+      "background": "background.webp",
+      "objects": [
+        {
+          "name": "sheep",
+          "layer": 1,
+          "visible_ratio": 1.0,
+          "amodal": "objects/00_sheep_amodal.webp",
+          "modal": "objects/00_sheep_modal.webp",
+          "crop_amodal": "objects/00_sheep_amodal_crop.webp",
+          "crop_modal": "objects/00_sheep_modal_crop.webp",
+          "origin": [
+            20,
+            3
+          ]
+        },
+        {
+          "name": "bear",
+          "layer": 0,
+          "visible_ratio": 0.591,
+          "amodal": "objects/01_bear_amodal.webp",
+          "modal": "objects/01_bear_modal.webp",
+          "crop_amodal": "objects/01_bear_amodal_crop.webp",
+          "crop_modal": "objects/01_bear_modal_crop.webp",
+          "origin": [
+            -126,
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}
